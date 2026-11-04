@@ -1,0 +1,1053 @@
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tanjiro Turf X Aurora - বুকিং সিস্টেম</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: #f5f5f5;
+            color: #333;
+        }
+
+        .header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 1.5rem;
+            text-align: center;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+
+        .header h1 {
+            font-size: 2rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .header p {
+            font-size: 1rem;
+            opacity: 0.9;
+        }
+
+        .login-container {
+            max-width: 500px;
+            margin: 3rem auto;
+            background: white;
+            padding: 2rem;
+            border-radius: 10px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+        }
+
+        .login-container h2 {
+            color: #667eea;
+            margin-bottom: 2rem;
+            text-align: center;
+        }
+
+        .role-buttons {
+            display: grid;
+            grid-template-columns: 1fr 1fr 1fr;
+            gap: 1rem;
+            margin-bottom: 2rem;
+        }
+
+        .role-btn {
+            padding: 1rem;
+            border: 2px solid #ddd;
+            background: white;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.3s;
+            color: #667eea;
+        }
+
+        .role-btn:hover, .role-btn.active {
+            background: #667eea;
+            color: white;
+            border-color: #667eea;
+        }
+
+        .form-group {
+            margin-bottom: 1rem;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: 600;
+            color: #333;
+        }
+
+        .form-group input, .form-group select {
+            width: 100%;
+            padding: 0.8rem;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            font-size: 1rem;
+        }
+
+        .form-group input:focus, .form-group select:focus {
+            outline: none;
+            border-color: #667eea;
+            box-shadow: 0 0 5px rgba(102, 126, 234, 0.2);
+        }
+
+        .btn {
+            width: 100%;
+            padding: 0.8rem;
+            background: #667eea;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background 0.3s;
+        }
+
+        .btn:hover {
+            background: #764ba2;
+        }
+
+        .btn-secondary {
+            background: #ddd;
+            color: #333;
+            margin-top: 0.5rem;
+        }
+
+        .btn-secondary:hover {
+            background: #bbb;
+        }
+
+        .dashboard {
+            max-width: 1400px;
+            margin: 2rem auto;
+            padding: 0 1rem;
+        }
+
+        .dashboard h2 {
+            color: #667eea;
+            margin-bottom: 1.5rem;
+            font-size: 1.8rem;
+        }
+
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 2rem;
+        }
+
+        .card {
+            background: white;
+            padding: 1.5rem;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+
+        .card h3 {
+            color: #667eea;
+            margin-bottom: 1rem;
+            font-size: 1.3rem;
+        }
+
+        .time-slots {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(80px, 1fr));
+            gap: 0.5rem;
+            margin: 1rem 0;
+        }
+
+        .slot {
+            padding: 0.8rem;
+            border: 2px solid #ddd;
+            border-radius: 5px;
+            text-align: center;
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.3s;
+            background: white;
+        }
+
+        .slot:hover {
+            border-color: #667eea;
+            background: #f0f4ff;
+        }
+
+        .slot.available {
+            color: #28a745;
+            border-color: #28a745;
+        }
+
+        .slot.booked {
+            background: #ccc;
+            color: #666;
+            cursor: not-allowed;
+            opacity: 0.5;
+        }
+
+        .slot.selected {
+            background: #667eea;
+            color: white;
+            border-color: #667eea;
+        }
+
+        .booking-list {
+            overflow-x: auto;
+        }
+
+        .booking-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 1rem;
+        }
+
+        .booking-table th {
+            background: #667eea;
+            color: white;
+            padding: 1rem;
+            text-align: left;
+        }
+
+        .booking-table td {
+            padding: 1rem;
+            border-bottom: 1px solid #ddd;
+        }
+
+        .booking-table tr:hover {
+            background: #f9f9f9;
+        }
+
+        .status-pending {
+            background: #fff3cd;
+            color: #856404;
+            padding: 0.3rem 0.8rem;
+            border-radius: 3px;
+            font-size: 0.9rem;
+        }
+
+        .status-confirmed {
+            background: #d4edda;
+            color: #155724;
+            padding: 0.3rem 0.8rem;
+            border-radius: 3px;
+            font-size: 0.9rem;
+        }
+
+        .status-cancelled {
+            background: #f8d7da;
+            color: #721c24;
+            padding: 0.3rem 0.8rem;
+            border-radius: 3px;
+            font-size: 0.9rem;
+        }
+
+        .small-btn {
+            padding: 0.5rem 1rem;
+            font-size: 0.9rem;
+            margin-right: 0.5rem;
+            cursor: pointer;
+            border: none;
+            border-radius: 3px;
+            background: #667eea;
+            color: white;
+        }
+
+        .small-btn:hover {
+            background: #764ba2;
+        }
+
+        .small-btn-danger {
+            background: #dc3545;
+        }
+
+        .small-btn-danger:hover {
+            background: #c82333;
+        }
+
+        .small-btn-success {
+            background: #28a745;
+        }
+
+        .small-btn-success:hover {
+            background: #218838;
+        }
+
+        .hidden {
+            display: none;
+        }
+
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.5);
+            z-index: 1000;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .modal.active {
+            display: flex;
+        }
+
+        .modal-content {
+            background: white;
+            padding: 2rem;
+            border-radius: 10px;
+            max-width: 500px;
+            width: 90%;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.3);
+        }
+
+        .modal-content h3 {
+            color: #667eea;
+            margin-bottom: 1rem;
+        }
+
+        .close-modal {
+            float: right;
+            font-size: 1.5rem;
+            cursor: pointer;
+            color: #666;
+        }
+
+        .close-modal:hover {
+            color: #000;
+        }
+
+        .summary {
+            background: #f0f4ff;
+            padding: 1rem;
+            border-radius: 5px;
+            margin: 1rem 0;
+        }
+
+        .summary p {
+            margin: 0.5rem 0;
+            font-weight: 500;
+        }
+
+        .price-info {
+            background: #fef3c7;
+            padding: 1rem;
+            border-radius: 5px;
+            margin: 1rem 0;
+            border-left: 4px solid #f59e0b;
+        }
+
+        .logout-btn {
+            position: absolute;
+            top: 1rem;
+            right: 1rem;
+            padding: 0.5rem 1rem;
+            background: #dc3545;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        .logout-btn:hover {
+            background: #c82333;
+        }
+
+        @media (max-width: 768px) {
+            .role-buttons {
+                grid-template-columns: 1fr;
+            }
+
+            .time-slots {
+                grid-template-columns: repeat(4, 1fr);
+            }
+
+            .booking-table {
+                font-size: 0.9rem;
+            }
+
+            .booking-table td, .booking-table th {
+                padding: 0.5rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>🏟️ Tanjiro Turf X Aurora Café & Bistro</h1>
+        <p>অনলাইন বুকিং সিস্টেম</p>
+    </div>
+
+    <!-- LOGIN PAGE -->
+    <div id="loginPage" class="login-container">
+        <h2>আপনি কি?</h2>
+        
+        <div class="role-buttons">
+            <button class="role-btn active" onclick="selectRole('customer')">👤 গ্রাহক</button>
+            <button class="role-btn" onclick="selectRole('staff')">👨‍💼 স্টাফ</button>
+            <button class="role-btn" onclick="selectRole('admin')">🔐 অ্যাডমিন</button>
+        </div>
+
+        <div id="customerLogin" class="form-group">
+            <label>আপনার নাম</label>
+            <input type="text" id="customerName" placeholder="নাম লিখুন">
+            <label style="margin-top: 1rem;">ফোন নম্বর</label>
+            <input type="tel" id="customerPhone" placeholder="০১XXX XXXXXX">
+            <button class="btn" onclick="loginCustomer()">এগিয়ে যান</button>
+        </div>
+
+        <div id="staffLogin" class="form-group hidden">
+            <label>ইউজার নাম</label>
+            <input type="text" id="staffUsername" placeholder="ইউজার নাম">
+            <label style="margin-top: 1rem;">পাসওয়ার্ড</label>
+            <input type="password" id="staffPassword" placeholder="পাসওয়ার্ড">
+            <button class="btn" onclick="loginStaff()">লগইন করুন</button>
+            <p style="text-align: center; margin-top: 1rem; font-size: 0.9rem; color: #666;">
+                ডিফল্ট: staff / 1234
+            </p>
+        </div>
+
+        <div id="adminLogin" class="form-group hidden">
+            <label>অ্যাডমিন ইমেইল</label>
+            <input type="email" id="adminEmail" placeholder="ইমেইল">
+            <label style="margin-top: 1rem;">পাসওয়ার্ড</label>
+            <input type="password" id="adminPassword" placeholder="পাসওয়ার্ড">
+            <button class="btn" onclick="loginAdmin()">লগইন করুন</button>
+            <p style="text-align: center; margin-top: 1rem; font-size: 0.9rem; color: #666;">
+                ডিফল্ট: admin@turf.com / admin123
+            </p>
+        </div>
+    </div>
+
+    <!-- CUSTOMER DASHBOARD -->
+    <div id="customerDashboard" class="dashboard hidden">
+        <button class="logout-btn" onclick="logout()">লগ আউট</button>
+        <h2>স্লট বুক করুন</h2>
+        
+        <div class="grid">
+            <div class="card">
+                <h3>📅 তারিখ নির্বাচন করুন</h3>
+                <input type="date" id="bookingDate" style="width: 100%; padding: 0.8rem;">
+            </div>
+
+            <div class="card">
+                <h3>⏰ উপলব্ধ সময় স্লট</h3>
+                <div class="time-slots" id="timeSlots"></div>
+            </div>
+        </div>
+
+        <div class="card">
+            <h3>💳 পেমেন্ট পদ্ধতি</h3>
+            <div class="form-group">
+                <label>পদ্ধতি বেছে নিন</label>
+                <select id="paymentMethod">
+                    <option value="">-- পছন্দ করুন --</option>
+                    <option value="bkash">bKash</option>
+                    <option value="nagad">নগদ</option>
+                    <option value="rocket">রকেট</option>
+                    <option value="upay">Upay</option>
+                    <option value="cash">নগদ টাকা</option>
+                </select>
+            </div>
+
+            <div id="paymentDetails" class="form-group hidden">
+                <label>মোবাইল নম্বর</label>
+                <input type="tel" id="paymentPhone" placeholder="০১XXX XXXXXX">
+            </div>
+
+            <div class="price-info">
+                <p>⏱️ <strong>নির্বাচিত সময়:</strong> <span id="selectedTime">-</span></p>
+                <p>💰 <strong>মূল্য:</strong> <span id="selectedPrice">-</span> টাকা</p>
+            </div>
+
+            <button class="btn" onclick="completeBooking()">বুকিং সম্পন্ন করুন</button>
+        </div>
+
+        <div class="card">
+            <h3>📋 আমার বুকিং</h3>
+            <div class="booking-list" id="myBookings"></div>
+        </div>
+    </div>
+
+    <!-- STAFF DASHBOARD -->
+    <div id="staffDashboard" class="dashboard hidden">
+        <button class="logout-btn" onclick="logout()">লগ আউট</button>
+        <h2>আজকের বুকিং তালিকা</h2>
+        
+        <div class="card">
+            <h3>📊 সব বুকিং</h3>
+            <div class="booking-list">
+                <table class="booking-table">
+                    <thead>
+                        <tr>
+                            <th>গ্রাহক</th>
+                            <th>ফোন</th>
+                            <th>তারিখ</th>
+                            <th>সময়</th>
+                            <th>স্থিতি</th>
+                            <th>অ্যাকশন</th>
+                        </tr>
+                    </thead>
+                    <tbody id="staffBookingsList"></tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <!-- ADMIN DASHBOARD -->
+    <div id="adminDashboard" class="dashboard hidden">
+        <button class="logout-btn" onclick="logout()">লগ আউট</button>
+        <h2>⚙️ অ্যাডমিন প্যানেল</h2>
+
+        <div class="grid">
+            <div class="card">
+                <h3>💰 দাম নির্ধারণ</h3>
+                <div class="form-group">
+                    <label>প্রতি স্লটের দাম (টাকা)</label>
+                    <input type="number" id="slotPrice" value="500" min="100">
+                </div>
+                <label>সময় স্লট (ঘণ্টা)</label>
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 0.5rem; margin: 0.5rem 0;">
+                    <div style="font-size: 0.9rem;">
+                        <input type="radio" name="slotDuration" value="30" id="slot30">
+                        <label for="slot30" style="display: inline; margin: 0;">৩০ মিনিট</label>
+                    </div>
+                    <div style="font-size: 0.9rem;">
+                        <input type="radio" name="slotDuration" value="60" id="slot60" checked>
+                        <label for="slot60" style="display: inline; margin: 0;">১ ঘণ্টা</label>
+                    </div>
+                    <div style="font-size: 0.9rem;">
+                        <input type="radio" name="slotDuration" value="120" id="slot120">
+                        <label for="slot120" style="display: inline; margin: 0;">২ ঘণ্টা</label>
+                    </div>
+                </div>
+                <button class="btn" onclick="updatePricing()">আপডেট করুন</button>
+            </div>
+
+            <div class="card">
+                <h3>⏰ খোলা সময়</h3>
+                <div class="form-group">
+                    <label>খোলার সময়</label>
+                    <input type="time" id="openTime" value="06:00">
+                </div>
+                <div class="form-group">
+                    <label>বন্ধের সময়</label>
+                    <input type="time" id="closeTime" value="22:00">
+                </div>
+                <button class="btn" onclick="updateOpeningHours()">আপডেট করুন</button>
+            </div>
+
+            <div class="card">
+                <h3>📞 যোগাযোগ তথ্য</h3>
+                <div class="form-group">
+                    <label>ফোন নম্বর</label>
+                    <input type="tel" id="contactPhone" value="+880 XXXX XXXXXX">
+                </div>
+                <div class="form-group">
+                    <label>ইমেইল</label>
+                    <input type="email" id="contactEmail" value="info@tanjiroturf.com">
+                </div>
+                <button class="btn" onclick="updateContact()">আপডেট করুন</button>
+            </div>
+        </div>
+
+        <div class="card">
+            <h3>📊 বুকিং পরিসংখ্যান</h3>
+            <div id="adminStats"></div>
+        </div>
+
+        <div class="card">
+            <h3>📋 সব বুকিং</h3>
+            <div class="booking-list">
+                <table class="booking-table">
+                    <thead>
+                        <tr>
+                            <th>গ্রাহক</th>
+                            <th>ফোন</th>
+                            <th>তারিখ</th>
+                            <th>সময়</th>
+                            <th>পেমেন্ট</th>
+                            <th>স্থিতি</th>
+                            <th>অ্যাকশন</th>
+                        </tr>
+                    </thead>
+                    <tbody id="adminBookingsList"></tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <!-- PAYMENT MODAL -->
+    <div id="paymentModal" class="modal">
+        <div class="modal-content">
+            <span class="close-modal" onclick="closePaymentModal()">&times;</span>
+            <h3>💳 পেমেন্ট তথ্য</h3>
+            <div class="summary">
+                <p><strong>নাম:</strong> <span id="modalCustomerName"></span></p>
+                <p><strong>তারিখ:</strong> <span id="modalDate"></span></p>
+                <p><strong>সময়:</strong> <span id="modalTime"></span></p>
+                <p><strong>মূল্য:</strong> <span id="modalPrice"></span> টাকা</p>
+                <p><strong>পদ্ধতি:</strong> <span id="modalPaymentMethod"></span></p>
+            </div>
+            <button class="btn" onclick="confirmPayment()">✅ পেমেন্ট সম্পন্ন করুন</button>
+            <button class="btn btn-secondary" onclick="closePaymentModal()">বাতিল করুন</button>
+        </div>
+    </div>
+
+    <script>
+        // Data Structure
+        let appData = {
+            currentUser: null,
+            userRole: null,
+            bookings: [],
+            settings: {
+                price: 500,
+                slotDuration: 60,
+                openTime: "06:00",
+                closeTime: "22:00",
+                phone: "+880 XXXX XXXXXX",
+                email: "info@tanjiroturf.com"
+            },
+            selectedSlot: null,
+            selectedDate: null,
+            selectedPayment: null
+        };
+
+        // Load data from localStorage
+        function loadData() {
+            const saved = localStorage.getItem('turfData');
+            if (saved) {
+                appData = JSON.parse(saved);
+            }
+        }
+
+        // Save data to localStorage
+        function saveData() {
+            localStorage.setItem('turfData', JSON.stringify(appData));
+        }
+
+        // Role Selection
+        function selectRole(role) {
+            document.querySelectorAll('.role-btn').forEach(btn => btn.classList.remove('active'));
+            event.target.classList.add('active');
+
+            document.getElementById('customerLogin').classList.add('hidden');
+            document.getElementById('staffLogin').classList.add('hidden');
+            document.getElementById('adminLogin').classList.add('hidden');
+
+            if (role === 'customer') {
+                document.getElementById('customerLogin').classList.remove('hidden');
+            } else if (role === 'staff') {
+                document.getElementById('staffLogin').classList.remove('hidden');
+            } else if (role === 'admin') {
+                document.getElementById('adminLogin').classList.remove('hidden');
+            }
+        }
+
+        // Login Functions
+        function loginCustomer() {
+            const name = document.getElementById('customerName').value.trim();
+            const phone = document.getElementById('customerPhone').value.trim();
+
+            if (!name || !phone) {
+                alert('নাম এবং ফোন নম্বর প্রয়োজন!');
+                return;
+            }
+
+            appData.currentUser = { name, phone, type: 'customer' };
+            appData.userRole = 'customer';
+            showCustomerDashboard();
+            saveData();
+        }
+
+        function loginStaff() {
+            const username = document.getElementById('staffUsername').value;
+            const password = document.getElementById('staffPassword').value;
+
+            if (username === 'staff' && password === '1234') {
+                appData.currentUser = { username, type: 'staff' };
+                appData.userRole = 'staff';
+                showStaffDashboard();
+                saveData();
+            } else {
+                alert('ইউজার নাম বা পাসওয়ার্ড ভুল!');
+            }
+        }
+
+        function loginAdmin() {
+            const email = document.getElementById('adminEmail').value;
+            const password = document.getElementById('adminPassword').value;
+
+            if (email === 'admin@turf.com' && password === 'admin123') {
+                appData.currentUser = { email, type: 'admin' };
+                appData.userRole = 'admin';
+                showAdminDashboard();
+                saveData();
+            } else {
+                alert('ইমেইল বা পাসওয়ার্ড ভুল!');
+            }
+        }
+
+        // Show Dashboards
+        function showCustomerDashboard() {
+            document.getElementById('loginPage').classList.add('hidden');
+            document.getElementById('customerDashboard').classList.remove('hidden');
+            setupCustomerDashboard();
+        }
+
+        function showStaffDashboard() {
+            document.getElementById('loginPage').classList.add('hidden');
+            document.getElementById('staffDashboard').classList.remove('hidden');
+            setupStaffDashboard();
+        }
+
+        function showAdminDashboard() {
+            document.getElementById('loginPage').classList.add('hidden');
+            document.getElementById('adminDashboard').classList.remove('hidden');
+            setupAdminDashboard();
+        }
+
+        // Customer Dashboard Setup
+        function setupCustomerDashboard() {
+            const today = new Date().toISOString().split('T')[0];
+            document.getElementById('bookingDate').value = today;
+            document.getElementById('bookingDate').addEventListener('change', loadTimeSlots);
+
+            document.getElementById('paymentMethod').addEventListener('change', function() {
+                const detailsDiv = document.getElementById('paymentDetails');
+                if (this.value && this.value !== 'cash') {
+                    detailsDiv.classList.remove('hidden');
+                } else {
+                    detailsDiv.classList.add('hidden');
+                }
+            });
+
+            loadTimeSlots();
+            loadMyBookings();
+        }
+
+        function loadTimeSlots() {
+            const date = document.getElementById('bookingDate').value;
+            const slots = generateTimeSlots();
+            const slotsContainer = document.getElementById('timeSlots');
+            slotsContainer.innerHTML = '';
+
+            slots.forEach(slot => {
+                const isBooked = appData.bookings.some(b => b.date === date && b.time === slot);
+                const button = document.createElement('button');
+                button.className = `slot ${isBooked ? 'booked' : 'available'}`;
+                button.textContent = slot;
+                button.disabled = isBooked;
+
+                if (!isBooked) {
+                    button.onclick = () => selectSlot(slot);
+                }
+
+                slotsContainer.appendChild(button);
+            });
+        }
+
+        function generateTimeSlots() {
+            const slots = [];
+            const start = appData.settings.openTime;
+            const end = appData.settings.closeTime;
+            const duration = appData.settings.slotDuration;
+
+            let [startHour, startMin] = start.split(':').map(Number);
+            let [endHour, endMin] = end.split(':').map(Number);
+
+            let current = startHour * 60 + startMin;
+            const endTime = endHour * 60 + endMin;
+
+            while (current < endTime) {
+                const hour = Math.floor(current / 60);
+                const min = current % 60;
+                slots.push(`${String(hour).padStart(2, '0')}:${String(min).padStart(2, '0')}`);
+                current += duration;
+            }
+
+            return slots;
+        }
+
+        function selectSlot(slot) {
+            appData.selectedSlot = slot;
+            document.getElementById('selectedTime').textContent = slot;
+            document.getElementById('selectedPrice').textContent = appData.settings.price;
+
+            document.querySelectorAll('.slot').forEach(s => s.classList.remove('selected'));
+            event.target.classList.add('selected');
+        }
+
+        function completeBooking() {
+            if (!appData.selectedSlot) {
+                alert('একটি সময় স্লট নির্বাচন করুন!');
+                return;
+            }
+
+            const paymentMethod = document.getElementById('paymentMethod').value;
+            if (!paymentMethod) {
+                alert('পেমেন্ট পদ্ধতি বেছে নিন!');
+                return;
+            }
+
+            appData.selectedPayment = paymentMethod;
+            showPaymentModal();
+        }
+
+        function showPaymentModal() {
+            document.getElementById('modalCustomerName').textContent = appData.currentUser.name;
+            document.getElementById('modalDate').textContent = document.getElementById('bookingDate').value;
+            document.getElementById('modalTime').textContent = appData.selectedSlot;
+            document.getElementById('modalPrice').textContent = appData.settings.price;
+            document.getElementById('modalPaymentMethod').textContent = getPaymentMethodName(appData.selectedPayment);
+            document.getElementById('paymentModal').classList.add('active');
+        }
+
+        function getPaymentMethodName(method) {
+            const names = {
+                'bkash': 'bKash',
+                'nagad': 'নগদ',
+                'rocket': 'রকেট',
+                'upay': 'Upay',
+                'cash': 'নগদ টাকা'
+            };
+            return names[method] || method;
+        }
+
+        function confirmPayment() {
+            const booking = {
+                id: Date.now(),
+                customerName: appData.currentUser.name,
+                customerPhone: appData.currentUser.phone,
+                date: document.getElementById('bookingDate').value,
+                time: appData.selectedSlot,
+                price: appData.settings.price,
+                paymentMethod: appData.selectedPayment,
+                status: 'pending',
+                createdAt: new Date().toLocaleString('bn-BD')
+            };
+
+            appData.bookings.push(booking);
+            saveData();
+            closePaymentModal();
+
+            alert('✅ বুকিং সফল! আপনার বুকিং আইডি: ' + booking.id);
+            loadTimeSlots();
+            loadMyBookings();
+            appData.selectedSlot = null;
+            document.getElementById('selectedTime').textContent = '-';
+            document.getElementById('selectedPrice').textContent = '-';
+        }
+
+        function closePaymentModal() {
+            document.getElementById('paymentModal').classList.remove('active');
+        }
+
+        function loadMyBookings() {
+            const myBookings = appData.bookings.filter(b => b.customerPhone === appData.currentUser.phone);
+            const container = document.getElementById('myBookings');
+
+            if (myBookings.length === 0) {
+                container.innerHTML = '<p>এখনও কোন বুকিং নেই</p>';
+                return;
+            }
+
+            let html = '<table class="booking-table"><thead><tr><th>তারিখ</th><th>সময়</th><th>মূল্য</th><th>স্থিতি</th><th>অ্যাকশন</th></tr></thead><tbody>';
+
+            myBookings.forEach(booking => {
+                html += `<tr>
+                    <td>${booking.date}</td>
+                    <td>${booking.time}</td>
+                    <td>${booking.price} টাকা</td>
+                    <td><span class="status-${booking.status}">${booking.status === 'pending' ? 'অপেক্ষমান' : booking.status === 'confirmed' ? 'নিশ্চিত' : 'বাতিল'}</span></td>
+                    <td><button class="small-btn-danger small-btn" onclick="cancelBooking(${booking.id})">বাতিল</button></td>
+                </tr>`;
+            });
+
+            html += '</tbody></table>';
+            container.innerHTML = html;
+        }
+
+        function cancelBooking(bookingId) {
+            if (confirm('বুকিং বাতিল করতে চান?')) {
+                appData.bookings = appData.bookings.filter(b => b.id !== bookingId);
+                saveData();
+                loadMyBookings();
+                loadTimeSlots();
+            }
+        }
+
+        // Staff Dashboard Setup
+        function setupStaffDashboard() {
+            loadStaffBookings();
+            setInterval(loadStaffBookings, 5000);
+        }
+
+        function loadStaffBookings() {
+            const today = new Date().toISOString().split('T')[0];
+            const todayBookings = appData.bookings.filter(b => b.date === today);
+
+            const container = document.getElementById('staffBookingsList');
+
+            if (todayBookings.length === 0) {
+                container.innerHTML = '<tr><td colspan="6" style="text-align: center;">আজকের কোন বুকিং নেই</td></tr>';
+                return;
+            }
+
+            let html = '';
+            todayBookings.forEach(booking => {
+                html += `<tr>
+                    <td>${booking.customerName}</td>
+                    <td>${booking.customerPhone}</td>
+                    <td>${booking.date}</td>
+                    <td>${booking.time}</td>
+                    <td><span class="status-${booking.status}">${booking.status === 'pending' ? 'অপেক্ষমান' : booking.status === 'confirmed' ? 'নিশ্চিত' : 'বাতিল'}</span></td>
+                    <td>
+                        <button class="small-btn-success small-btn" onclick="updateBookingStatus(${booking.id}, 'confirmed')">নিশ্চিত</button>
+                        <button class="small-btn-danger small-btn" onclick="updateBookingStatus(${booking.id}, 'cancelled')">বাতিল</button>
+                    </td>
+                </tr>`;
+            });
+
+            container.innerHTML = html;
+        }
+
+        // Admin Dashboard Setup
+        function setupAdminDashboard() {
+            document.getElementById('slotPrice').value = appData.settings.price;
+            document.getElementById('openTime').value = appData.settings.openTime;
+            document.getElementById('closeTime').value = appData.settings.closeTime;
+            document.getElementById('contactPhone').value = appData.settings.phone;
+            document.getElementById('contactEmail').value = appData.settings.email;
+
+            const duration = appData.settings.slotDuration;
+            document.getElementById(`slot${duration}`).checked = true;
+
+            updateAdminStats();
+            loadAdminBookings();
+        }
+
+        function updatePricing() {
+            appData.settings.price = parseInt(document.getElementById('slotPrice').value);
+            const duration = document.querySelector('input[name="slotDuration"]:checked').value;
+            appData.settings.slotDuration = parseInt(duration);
+            saveData();
+            alert('✅ দাম আপডেট হয়েছে!');
+        }
+
+        function updateOpeningHours() {
+            appData.settings.openTime = document.getElementById('openTime').value;
+            appData.settings.closeTime = document.getElementById('closeTime').value;
+            saveData();
+            alert('✅ খোলা সময় আপডেট হয়েছে!');
+        }
+
+        function updateContact() {
+            appData.settings.phone = document.getElementById('contactPhone').value;
+            appData.settings.email = document.getElementById('contactEmail').value;
+            saveData();
+            alert('✅ যোগাযোগ তথ্য আপডেট হয়েছে!');
+        }
+
+        function updateAdminStats() {
+            const total = appData.bookings.length;
+            const pending = appData.bookings.filter(b => b.status === 'pending').length;
+            const confirmed = appData.bookings.filter(b => b.status === 'confirmed').length;
+            const revenue = appData.bookings.filter(b => b.status === 'confirmed').reduce((sum, b) => sum + b.price, 0);
+
+            const html = `
+                <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 1rem;">
+                    <div style="background: #f0f4ff; padding: 1rem; border-radius: 5px;">
+                        <p style="font-size: 1.5rem; font-weight: bold; color: #667eea;">${total}</p>
+                        <p style="color: #666;">মোট বুকিং</p>
+                    </div>
+                    <div style="background: #fff3cd; padding: 1rem; border-radius: 5px;">
+                        <p style="font-size: 1.5rem; font-weight: bold; color: #f59e0b;">${pending}</p>
+                        <p style="color: #666;">অপেক্ষমান</p>
+                    </div>
+                    <div style="background: #d4edda; padding: 1rem; border-radius: 5px;">
+                        <p style="font-size: 1.5rem; font-weight: bold; color: #28a745;">${confirmed}</p>
+                        <p style="color: #666;">নিশ্চিত</p>
+                    </div>
+                    <div style="background: #d1ecf1; padding: 1rem; border-radius: 5px;">
+                        <p style="font-size: 1.5rem; font-weight: bold; color: #0c5460;">${revenue}</p>
+                        <p style="color: #666;">আয় (টাকা)</p>
+                    </div>
+                </div>
+            `;
+            document.getElementById('adminStats').innerHTML = html;
+        }
+
+        function loadAdminBookings() {
+            const container = document.getElementById('adminBookingsList');
+
+            if (appData.bookings.length === 0) {
+                container.innerHTML = '<tr><td colspan="7" style="text-align: center;">কোন বুকিং নেই</td></tr>';
+                return;
+            }
+
+            let html = '';
+            appData.bookings.forEach(booking => {
+                html += `<tr>
+                    <td>${booking.customerName}</td>
+                    <td>${booking.customerPhone}</td>
+                    <td>${booking.date}</td>
+                    <td>${booking.time}</td>
+                    <td>${getPaymentMethodName(booking.paymentMethod)}</td>
+                    <td><span class="status-${booking.status}">${booking.status === 'pending' ? 'অপেক্ষমান' : booking.status === 'confirmed' ? 'নিশ্চিত' : 'বাতিল'}</span></td>
+                    <td>
+                        <button class="small-btn-success small-btn" onclick="updateBookingStatus(${booking.id}, 'confirmed')">নিশ্চিত</button>
+                        <button class="small-btn-danger small-btn" onclick="updateBookingStatus(${booking.id}, 'cancelled')">বাতিল</button>
+                    </td>
+                </tr>`;
+            });
+
+            container.innerHTML = html;
+        }
+
+        function updateBookingStatus(bookingId, status) {
+            const booking = appData.bookings.find(b => b.id === bookingId);
+            if (booking) {
+                booking.status = status;
+                saveData();
+                if (appData.userRole === 'staff') {
+                    loadStaffBookings();
+                } else {
+                    loadAdminBookings();
+                    updateAdminStats();
+                }
+            }
+        }
+
+        function logout() {
+            appData.currentUser = null;
+            appData.userRole = null;
+            appData.selectedSlot = null;
+
+            document.getElementById('loginPage').classList.remove('hidden');
+            document.getElementById('customerDashboard').classList.add('hidden');
+            document.getElementById('staffDashboard').classList.add('hidden');
+            document.getElementById('adminDashboard').classList.add('hidden');
+
+            document.getElementById('customerName').value = '';
+            document.getElementById('customerPhone').value = '';
+            document.getElementById('staffUsername').value = '';
+            document.getElementById('staffPassword').value = '';
+            document.getElementById('adminEmail').value = '';
+            document.getElementById('adminPassword').value = '';
+        }
+
+        // Initialize
+        loadData();
+    </script>
+</body>
+</html>
